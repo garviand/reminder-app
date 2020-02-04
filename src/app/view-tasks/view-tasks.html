@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>My Tasks</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item-sliding *ngFor="let task of tasks" #taskActions (ionDrag)="updateTaskActionStatus(taskActions)">
+      <ion-item>
+        <ion-label>
+          <ion-text color="primary">
+            <h1>{{ task.name }}</h1>
+          </ion-text>
+          <p>{{ getProgressDisplay(task) }}</p>
+          <ion-text color="medium">
+            <p [innerHTML]="getTimeRemainingDisplay(task)"></p>
+          </ion-text>
+        </ion-label>
+        <ion-button slot="end" (click)="toggleTaskActions(taskActions)">
+          <ion-icon *ngIf="!taskActions.isOpen" name="arrow-round-back" slot="icon-only"></ion-icon>
+          <ion-icon *ngIf="taskActions.isOpen" name="arrow-round-forward" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option (click)="markTaskComplete(task)">
+          <ion-icon name="checkmark-circle" slot="top"></ion-icon>
+          Done!
+        </ion-item-option>
+        <ion-item-option color="medium" (click)="snoozeTask(task)">
+          <ion-icon name="alarm" slot="top"></ion-icon>
+          Snooze
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

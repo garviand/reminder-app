@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { Storage } from '@ionic/storage';
 import moment from 'moment-timezone';
 import { ITask, Task } from '../task';
+import { TaskService } from '../task.service';
 
 @Component({
   selector: 'app-create-task',
-  templateUrl: 'create-task.page.html',
-  styleUrls: ['create-task.page.scss']
+  templateUrl: 'create-task.html',
+  styleUrls: ['create-task.scss']
 })
 export class CreateTaskPage implements OnInit {
 
@@ -15,7 +17,9 @@ export class CreateTaskPage implements OnInit {
   public day: string = 'today';
   public isInPast: boolean = false;
 
-  constructor() {}
+  constructor(
+    private taskService: TaskService
+  ) {}
 
   ngOnInit() {
     if (this.task.dueAt < this.now) {
@@ -42,11 +46,13 @@ export class CreateTaskPage implements OnInit {
     time.hour(this.task.dueAt.hour());
     time.minute(this.task.dueAt.minute());
     time.startOf('minute');
-    this.checkInPast();
+    this.task.dueAt = time;
   }
 
-  createTask() {
-    console.log(this.task);
+  async createTask() {
+    await this.taskService.createTask(this.task);
   }
+
+  
 
 }
